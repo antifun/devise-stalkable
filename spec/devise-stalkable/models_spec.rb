@@ -29,6 +29,16 @@ describe Devise::Models::Stalkable do
       model.mark_login!(request)
     end
 
+    it 'records parameters' do
+      expect(TestModelLogin).to receive(:create).with(hash_including(user_id: 1))
+      request = double("request")
+      expect(request).to receive(:ip_address).and_return('1.2.3.4')
+      expect(request).to receive(:host).and_return('host.example.com')
+      expect(request).to receive(:port).and_return(443)
+      expect(request).to receive(:user_agent).and_return('Mozilla, fool!')
+      model.mark_login!(request)
+    end
+
   end
 
   describe '#mark_logout!' do
